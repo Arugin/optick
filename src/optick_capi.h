@@ -459,13 +459,13 @@ static const OptickAPI_Category OptickAPI_Category_GPU_Water		= OPTICK_C_MAKE_CA
 	#define OPTICK_C_REGISTER_STORAGE(NAME) OptickAPI_RegisterStorage(NAME, (uint64_t)-1, OptickAPI_ThreadMask_None)
 
 	#define OPTICK_C_PUSH(EVENT_VAR, NAME, CATEGORY)	static uint64_t OPTICK_CONCAT(autogen_description_, __LINE__) = 0; \
-										if (OPTICK_CONCAT(autogen_description_, __LINE__) == 0) OPTICK_CONCAT(autogen_description_, __LINE__) = OptickAPI_CreateEventDescription( NAME, __FILE__, __LINE__, CATEGORY); \
+										if (OPTICK_CONCAT(autogen_description_, __LINE__) == 0) OPTICK_CONCAT(autogen_description_, __LINE__) = OptickAPI_CreateEventDescription( NAME, (uint16_t)strlen(NAME), __FILE__, (uint16_t)strlen(__FILE__), __LINE__, CATEGORY); \
 										uint64_t EVENT_VAR = OptickAPI_PushEvent(OPTICK_CONCAT(autogen_description_, __LINE__));
 	#define OPTICK_C_GPU_PUSH(EVENT_VAR, NAME, CATEGORY) static uint64_t OPTICK_CONCAT(gpu_autogen_description_, __LINE__) = 0; \
-										if (OPTICK_CONCAT(gpu_autogen_description_, __LINE__) == 0) OPTICK_CONCAT(gpu_autogen_description_, __LINE__) = OptickAPI_CreateEventDescription( NAME, __FILE__, __LINE__, CATEGORY); \
+										if (OPTICK_CONCAT(gpu_autogen_description_, __LINE__) == 0) OPTICK_CONCAT(gpu_autogen_description_, __LINE__) = OptickAPI_CreateEventDescription( NAME, (uint16_t)strlen(NAME), __FILE__, (uint16_t)strlen(__FILE__), __LINE__, CATEGORY); \
 										uint64_t EVENT_VAR = OptickAPI_PushGPUEvent(OPTICK_CONCAT(gpu_autogen_description_, __LINE__));
 	#define OPTICK_C_TAG(EVENT_DESC_VAR, NAME) static uint64_t EVENT_DESC_VAR = 0; \
-										if (EVENT_DESC_VAR == 0) EVENT_DESC_VAR = OptickAPI_CreateEventDescription( NAME, __FILE__, __LINE__, OptickAPI_Category_None); \
+										if (EVENT_DESC_VAR == 0) EVENT_DESC_VAR = OptickAPI_CreateEventDescription( NAME, (uint16_t)strlen(NAME), __FILE__,  (uint16_t)strlen(__FILE__), __LINE__, OptickAPI_Category_None); \
 
 #else
 

@@ -77,7 +77,7 @@ int main()
 			// Attach some tags to the event
 			OPTICK_C_TAG(stdoutTag, "CustomTag");
 			//OptickAPI_AttachTag_Int32(stdoutTag, -123);
-			OptickAPI_AttachTag_String(stdoutTag, "HelloFromC");
+			OptickAPI_AttachTag_String(stdoutTag, "HelloFromC", (uint16_t)strlen("HelloFromC"));
 
 			printf(".");
 			fflush(stdout);
