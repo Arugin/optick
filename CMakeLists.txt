@@ -24,12 +24,18 @@ source_group("OptickCore" FILES ${OPTICK_SRC})
 
 # Enabled
 option(OPTICK_ENABLED "Enable profiling with Optick" ON)
+option(OPTICK_CORE_STATIC "Build OptickCore as a static library rather than a shared library" OFF)
 option(OPTICK_INSTALL_TARGETS "Should optick be installed? Set to OFF if you use add_subdirectory to include Optick." ON)
 
 if(NOT OPTICK_ENABLED)
 	message(STATUS "Optick is disabled")
 	# add dummy target as a replacement
-	add_library(OptickCore STATIC ${OPTICK_SRC})
+	if(OPTICK_CORE_STATIC)
+		add_library(OptickCore STATIC ${OPTICK_SRC})
+		set_property(TARGET OptickCore PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+	else()
+		add_library(OptickCore SHARED ${OPTICK_SRC})
+	endif()
 	target_include_directories(OptickCore PUBLIC "src")
 	target_compile_definitions(OptickCore PUBLIC USE_OPTICK=0)
 	return()
@@ -50,7 +56,7 @@ target_include_directories(OptickCore
 )
 set_target_properties(OptickCore 
 	PROPERTIES 
-		PUBLIC_HEADER "${CMAKE_CURRENT_LIST_DIR}/src/optick.h;${CMAKE_CURRENT_LIST_DIR}/src/optick.config.h"
+		PUBLIC_HEADER "${CMAKE_CURRENT_LIST_DIR}/src/optick.h;${CMAKE_CURRENT_LIST_DIR}/src/optick_capi.h;${CMAKE_CURRENT_LIST_DIR}/src/optick.config.h"
 		DEBUG_POSTFIX d # So that we can install debug and release side by side
 )
 target_compile_definitions(OptickCore PRIVATE OPTICK_EXPORTS=1)
@@ -94,10 +100,18 @@ endif()
 if(OPTICK_BUILD_CONSOLE_SAMPLE)
 	file(GLOB TEST_ENGINE_SRC "samples/Common/TestEngine/*.*")
 	source_group("TestEngine" FILES ${TEST_ENGINE_SRC})
+	
 	add_executable(ConsoleApp "samples/ConsoleApp/main.cpp" ${TEST_ENGINE_SRC})
 	target_include_directories(ConsoleApp PRIVATE "samples/Common/TestEngine")
 	target_link_libraries(ConsoleApp ${EXTRA_LIBS})
 	set_target_properties(ConsoleApp PROPERTIES FOLDER Samples)
+	target_compile_definitions(ConsoleApp PRIVATE OPTICK_ENABLE_GPU=0)
+
+	add_executable(ConsoleAppCAPI "samples/ConsoleAppCAPI/main.cpp" ${TEST_ENGINE_SRC})
+	target_include_directories(ConsoleAppCAPI PRIVATE "samples/Common/TestEngine")
+	target_link_libraries(ConsoleAppCAPI ${EXTRA_LIBS})
+	set_target_properties(ConsoleAppCAPI PROPERTIES FOLDER Samples)
+	target_compile_definitions(ConsoleAppCAPI PRIVATE OPTICK_ENABLE_GPU=0)
 endif()
 
 
@@ -132,7 +146,6 @@ if(OPTICK_INSTALL_TARGETS)
 		ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
 		INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 		PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-
 	)
 
 	install(

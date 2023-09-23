@@ -1591,6 +1591,11 @@ void Core::InitGPUProfiler(GPUProfiler* profiler)
 	OPTICK_ASSERT(gpuProfiler == nullptr, "Can't reinitialize GPU profiler! Not supported yet!");
 	gpuProfiler = profiler;
 }
+void Core::ShutdownGPUProfiler()
+{
+	Memory::Delete<GPUProfiler>(gpuProfiler);
+	gpuProfiler = nullptr;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool Core::SetSettings(const CaptureSettings& captureSettings)
 {
