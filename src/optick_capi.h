@@ -466,17 +466,18 @@ static const OptickAPI_Category OptickAPI_Category_GPU_Water		= OPTICK_C_MAKE_CA
 										uint64_t EVENT_VAR = OptickAPI_PushGPUEvent(OPTICK_CONCAT(gpu_autogen_description_, __LINE__));
 	#define OPTICK_C_TAG(EVENT_DESC_VAR, NAME) static uint64_t EVENT_DESC_VAR = 0; \
 										if (EVENT_DESC_VAR == 0) EVENT_DESC_VAR = OptickAPI_CreateEventDescription( NAME, __FILE__, __LINE__, OptickAPI_Category_None); \
+
 #else
 
-	#define OPTICK_CAPI_UNUSED(x) (void)(x)
+#define OPTICK_CAPI_UNUSED(x) (void)(x)
 	inline void OptickAPI_SetAllocator(OptickAPI_AllocateFn allocateFn, OptickAPI_DeallocateFn deallocateFn, OptickAPI_InitThreadCb initThreadCb) {}
 	inline void OptickAPI_RegisterThread(const char* inThreadName, uint16_t inThreadNameLength) { OPTICK_CAPI_UNUSED(inThreadName); OPTICK_CAPI_UNUSED(inThreadNameLength); }
 	inline uint64_t OptickAPI_RegisterStorage(const char* name, uint64_t inThreadId, OptickAPI_ThreadMask inThreadMask) { return 0;}
-	inline uint64_t OptickAPI_CreateEventDescription(const char* inFunctionName, uint16_t inFunctionLength, const char* inFileName, uint16_t inFileNameLenght, uint32_t inFileLinee, OptickAPI_Category category) { OPTICK_CAPI_UNUSED(inFunctionName); OPTICK_CAPI_UNUSED(inFunctionLength); OPTICK_CAPI_UNUSED(inFileName); OPTICK_CAPI_UNUSED(inFileNameLenght); OPTICK_CAPI_UNUSED(inFileLine); OPTICK_CAPI_UNUSED(category); return 0; }
+	inline uint64_t OptickAPI_CreateEventDescription(const char* inFunctionName, uint16_t inFunctionLength, const char* inFileName, uint16_t inFileNameLenght, uint32_t inFileLine, OptickAPI_Category category) { OPTICK_CAPI_UNUSED(inFunctionName); OPTICK_CAPI_UNUSED(inFunctionLength); OPTICK_CAPI_UNUSED(inFileName); OPTICK_CAPI_UNUSED(inFileNameLenght); OPTICK_CAPI_UNUSED(inFileLine); OPTICK_CAPI_UNUSED(category); OPTICK_CAPI_UNUSED(category); return 0; }
 	inline uint64_t OptickAPI_PushEvent(uint64_t inEventDescription) { OPTICK_CAPI_UNUSED(inEventDescription); return 0; }
 	inline void OptickAPI_PopEvent(uint64_t inEventData) { OPTICK_CAPI_UNUSED(inEventData); }
 	
-	inline OptickAPI_GPUContext OptickAPI_SetGpuContext(OptickAPI_GPUContext context) { return (OptikcAPI_GPUContext){0}; }
+	inline OptickAPI_GPUContext OptickAPI_SetGpuContext(OptickAPI_GPUContext context) { return (OptickAPI_GPUContext){0}; }
 	inline uint64_t OptickAPI_PushGPUEvent(uint64_t inEventDescription) { return 0; }
 	inline void OptickAPI_PopGPUEvent(uint64_t inEventData) {}
 	
